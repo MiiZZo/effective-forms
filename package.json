@@ -1,5 +1,5 @@
 {
-  "name": "effector-forms-zod",
+  "name": "effector-forms-zod2",
   "files": [
     "dist"
   ],
@@ -11,7 +11,7 @@
       "require": "./dist/index.umd.cjs"
     }
   },
-  "version": "0.0.1",
+  "version": "0.0.0-real-version-will-be-set-on-ci",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,8 +19,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.3.3",
+    "effector": "^22.8.6",
     "typescript": "^5.0.2",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "zod": "^3.21.4"
   },
   "dependencies": {},
   "peerDependencies": {

@@ -8,5 +8,8 @@ export default defineConfig({
       name: 'effector-forms-zod',
       fileName: 'index',
     },
+    rollupOptions: {
+      external: ['effector', 'zod'],
+    },
   },
 })
