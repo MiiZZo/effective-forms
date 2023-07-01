@@ -36,8 +36,7 @@ export function createForm<T extends { [_: string]: z.ZodString | z.ZodNumber }>
 
     sample({
       source: setErrors,
-      filter: (errors) => !!errors,
-      fn: (errors) => errors[key],
+      fn: (errors) => errors[key] || [],
       target: $errors,
     });
 
@@ -111,5 +110,6 @@ export function createForm<T extends { [_: string]: z.ZodString | z.ZodNumber }>
     $values,
     $isValid,
     submitted,
+    validated,
   };
 }
