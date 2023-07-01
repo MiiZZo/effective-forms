@@ -1,5 +1,5 @@
 {
-  "name": "effector-forms-zod",
+  "name": "effector-zod-forms",
   "files": [
     "dist"
   ],
