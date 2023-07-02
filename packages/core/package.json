@@ -1,0 +1,8 @@
+{
+  "name": "@effective-forms/core",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "peerDependencies": {
+    "effector": "^22.8.6"
+  }
+}

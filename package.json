@@ -1,34 +1,34 @@
 {
-  "name": "effector-zod-forms",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.umd.js",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.umd.cjs"
-    }
-  },
-  "version": "0.0.0-real-version-will-be-set-on-ci",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build && tsc --emitDeclarationOnly"
-  },
-  "devDependencies": {
-    "@types/node": "^20.3.3",
-    "effector": "^22.8.6",
-    "typescript": "^5.0.2",
-    "vite": "^4.3.9",
-    "zod": "^3.21.4"
-  },
-  "dependencies": {},
-  "peerDependencies": {
-    "effector": "^22.8.6",
-    "zod": "^3.21.4"
-  },
+  "name": "@effective-forms/source",
+  "version": "0.0.0",
   "license": "MIT",
-  "author": "miizzo"
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/eslint-plugin": "16.4.2",
+    "@nx/js": "16.4.2",
+    "@nx/linter": "16.4.2",
+    "@nx/vite": "16.4.2",
+    "@nx/workspace": "16.4.2",
+    "@types/node": "18.7.1",
+    "@typescript-eslint/eslint-plugin": "^5.58.0",
+    "@typescript-eslint/parser": "^5.58.0",
+    "@vitest/coverage-c8": "^0.32.0",
+    "@vitest/ui": "^0.32.0",
+    "eslint": "~8.15.0",
+    "eslint-config-prettier": "8.1.0",
+    "nx": "16.4.2",
+    "nx-cloud": "latest",
+    "prettier": "^2.6.2",
+    "typescript": "~5.1.3",
+    "verdaccio": "^5.0.4",
+    "vite": "^4.3.9",
+    "vite-plugin-dts": "~2.3.0",
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.32.0"
+  },
+  "nx": {
+    "includedScripts": []
+  }
 }
