@@ -29,6 +29,6 @@ jobs:
       - name: Build
         run: yarn nx run core:build
       - name: Publish
-        run: yarn nx run core:publish ver=$VER
+        run: yarn nx run core:publish --args='--ver=$VER'
         env:
           VER: ${{ steps.version.outputs.tag }}
