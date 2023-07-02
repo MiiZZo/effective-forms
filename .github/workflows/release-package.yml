@@ -22,7 +22,9 @@ jobs:
           tagRegex: 'v(.*)'
 
       - name: Create NPM config
-        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+        run: |
+          echo "//registry.npmjs.org/:_authToken="${{secrets.NPM_TOKEN}}"" > ~/.npmrc
+        shell: sh
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
