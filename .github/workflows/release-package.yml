@@ -34,4 +34,4 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
       - name: Publish
-        run: yarn nx run-many --output-style=static --target=publish --all ver ${{ steps.version.outputs.tag }}
+        run: yarn nx run-many --output-style=static --target=publish --all
