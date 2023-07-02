@@ -33,5 +33,9 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
+      - name: Build
+        run: nx run core:build
       - name: Publish
-        run: yarn nx run-many --output-style=static --target=publish --all
+        run: nx run core:publish ver=$NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
