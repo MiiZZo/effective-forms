@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@effective-forms/core": ["packages/core/src/index.ts"]
+      "@effective-forms/core": ["packages/core/src/index.ts"],
+      "@effective-forms/zod": ["packages/zod/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
