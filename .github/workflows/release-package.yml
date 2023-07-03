@@ -41,4 +41,4 @@ jobs:
         if: steps.tagName.outputs.package == '@effective-forms/zod'
         run: npx nx run core:publish --args='--ver=$VER'
         env:
-          VER: ${{ steps.version.outputs.tag }}
+          VER: ${{ steps.tagName.outputs.version }}
