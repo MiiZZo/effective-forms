@@ -14,10 +14,10 @@ export function zodSchema<T extends { [_: string]: z.ZodString | z.ZodNumber | z
 }: Config<T>) {
   const finalSchema: Schema<{ [key in keyof T]: T[key]['_type'] }> = {} as unknown as Schema<{ [key in keyof T]: T[key]['_type'] }>;
   
-  for (const key in schema) {
+  for (const key in schema.shape) {
     const field = schema.shape[key];
 
-    finalSchema.values[key as keyof T] = {
+    finalSchema.values[key] = {
       initialValue: initialValues[key],
       validator: (value: typeof field['_type']) => {
         const result = field.safeParse(value);
