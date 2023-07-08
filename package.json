@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "@faker-js/faker": "8.0.2",
     "@nx/eslint-plugin": "16.4.2",
     "@nx/js": "16.4.2",
     "@nx/linter": "16.4.2",
