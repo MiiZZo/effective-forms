@@ -43,7 +43,7 @@ export default defineConfig({
     },
     rollupOptions: {
       // External packages that should not be bundled into your library.
-      external: ['zod', '@effective-forms/zod'],
+      external: ['zod', '@effective-forms/core'],
     },
   },
 
