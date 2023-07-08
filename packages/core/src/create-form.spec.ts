@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { fork, is, allSettled } from 'effector';
 import { faker } from '@faker-js/faker';
 import { createForm } from './create-form';
-import { appendFileSync, writeFileSync } from 'fs';
 
 describe('create-form', () => {
   let scope = fork();
