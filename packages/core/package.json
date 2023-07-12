@@ -2,6 +2,7 @@
   "name": "@effective-forms/core",
   "version": "0.0.1",
   "type": "commonjs",
+  "license": "MIT",
   "peerDependencies": {
     "effector": "^22.8.6"
   }
