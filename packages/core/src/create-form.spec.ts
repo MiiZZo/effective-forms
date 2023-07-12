@@ -391,4 +391,61 @@ describe('create-form', () => {
 
     expect(submittedSpy).toBeCalledTimes(1);
   });
+
+  it('field should be dirty when changed its value', async () => {
+    expect(scope.getState(form.fields.email.$isDirty)).toBe(false);
+
+    await allSettled(form.fields.email.changed, {
+      scope,
+      params: 'email',
+    });
+
+    expect(scope.getState(form.fields.email.$isDirty)).toBe(true);
+  });
+
+  it('should clear fields', async () => {
+    await allSettled(form.fields.email.changed, {
+      params: email,
+      scope,
+    });
+
+    await allSettled(form.fields.email.validateFx, {
+      scope,
+    });
+
+    expect(scope.getState(form.fields.email.$value)).toBe(email);
+    expect(scope.getState(form.fields.email.$isDirty)).toBe(true);
+    expect(scope.getState(form.fields.email.$isValid)).toBe(true);
+
+    await allSettled(form.fields.email.cleared, {
+      scope,
+    });
+
+    expect(scope.getState(form.fields.email.$value)).toBe(initialValues.email);
+    expect(scope.getState(form.fields.email.$isDirty)).toBe(false);
+    expect(scope.getState(form.fields.email.$isValid)).toBe(false);
+  });
+
+  it('should clear form', async () => {
+    await allSettled(form.fields.email.changed, {
+      params: email,
+      scope,
+    });
+
+    await allSettled(form.fields.email.validateFx, {
+      scope,
+    });
+
+    expect(scope.getState(form.fields.email.$value)).toBe(email);
+    expect(scope.getState(form.fields.email.$isDirty)).toBe(true);
+    expect(scope.getState(form.fields.email.$isValid)).toBe(true);
+
+    await allSettled(form.cleared, {
+      scope,
+    });
+
+    expect(scope.getState(form.fields.email.$value)).toBe(initialValues.email);
+    expect(scope.getState(form.fields.email.$isDirty)).toBe(false);
+    expect(scope.getState(form.fields.email.$isValid)).toBe(false);
+  });
 });

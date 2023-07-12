@@ -40,6 +40,7 @@ type Field<T extends string | number | boolean> = {
   $value: Store<T>;
   $errors: Store<string[]>;
   $isValid: Store<boolean>;
+  $isDirty: Store<boolean>;
   changed: Event<T>;
   cleared: Event<void>;
   validateFx: Effect<void, FieldValidationResult<boolean>, Error>;
@@ -51,7 +52,8 @@ interface Form<T extends { [key: string]: string | number | boolean }> {
     [key in keyof T]: Field<T[key]>;
   };
   $isFormValid: Store<boolean>;
-  $values: Store<{ [key in keyof T]: T[key] }>
+  $values: Store<{ [key in keyof T]: T[key] }>;
+  cleared: Event<void>;
   submit: Event<void>;
   submitted: Event<void>;
   validateFormFx: Effect<void, FormValidationResult<boolean, T>, Error>
@@ -72,6 +74,7 @@ export function createForm<T extends { [key: string]: string | number | boolean 
   const baseValidateFormFx = createEffect((fieldsValues: { [key in keyof T]: T[key] }) => schema.validator(fieldsValues));
   const submit = createEvent();
   const submitted = createEvent();
+  const formCleared = createEvent();
   const fieldsIsValidAsArray: Store<boolean>[] = [];
   const keyValue: Record<keyof T,  Store<T[Extract<keyof T, string>]>> = {} as any;
 
@@ -82,11 +85,13 @@ export function createForm<T extends { [key: string]: string | number | boolean 
     const changed = createEvent<typeof initialValue>();
     const cleared = createEvent();
     const validated = createEvent<boolean>();
+    const setIsDirty = createEvent();
     const setErrors = createEvent<string[]>();
 
     const $value = createStore(initialValue);
     const $errors = createStore<string[]>([]);
     const $isValid = createStore<boolean>(false);
+    const $isDirty = createStore(false);
 
     fieldsIsValidAsArray.push($isValid);
     keyValue[valueKey] = $value;
@@ -96,17 +101,27 @@ export function createForm<T extends { [key: string]: string | number | boolean 
       effect: (value) => field.validator(value),
     });
 
+    $isDirty
+      .on(setIsDirty, () => true)
+      .reset([cleared, formCleared]);
+
     $value
       .on(changed, (_, value) => value)
-      .reset(cleared);
+      .reset([cleared, formCleared]);
 
     $isValid
       .on(validated, (_, isValid) => isValid)
-      .reset(cleared);
+      .reset([cleared, formCleared]);
 
     $errors
       .on(setErrors, (_, errors) => errors)
-      .reset(cleared);
+      .reset([cleared, formCleared]);
+
+    sample({
+      clock: changed,
+      filter: $isDirty.map((x) => !x),
+      target: setIsDirty,
+    });
 
     sample({
       clock: validateFx.doneData,
@@ -160,6 +175,7 @@ export function createForm<T extends { [key: string]: string | number | boolean 
       $value,
       $errors,
       $isValid,
+      $isDirty,
       changed,
       cleared,
       validated,
@@ -189,6 +205,7 @@ export function createForm<T extends { [key: string]: string | number | boolean 
     fields,
     $isFormValid,
     $values,
+    cleared: formCleared,
     submit,
     submitted,
     validateFormFx,
