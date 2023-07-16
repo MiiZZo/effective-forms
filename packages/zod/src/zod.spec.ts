@@ -63,5 +63,45 @@ describe('zodSchema', () => {
 
     expect(formSuccessValidationResult.result).toBe(true);
   });
+
+  it('should work correctly with zod effects' , () => {
+    const schema = z.object({
+      string: z.string().refine((string) => string.length > 0, 'Too short'),
+      boolean: z.boolean().refine(Boolean, 'Should be true'),
+      number: z.number().refine((number) => number > 5, 'Not valid number'),
+    });
+
+    const formSchema = zodSchema({
+      initialValues: {
+        boolean: false,
+        number: 0,
+        string: '',
+      },
+      schema,
+    });
+
+    const failResult = formSchema.validator({
+      boolean: false,
+      number: 0,
+      string: '',
+    }) as FailFormValidationResult<{
+      string: string;
+      boolean: boolean;
+      number: number;
+    }>;
+
+    expect(failResult.result).toBe(false);
+    expect(failResult.errors.number).toEqual(['Not valid number']);
+    expect(failResult.errors.boolean).toEqual(['Should be true']);
+    expect(failResult.errors.string).toEqual(['Too short']);
+
+    const successResult = formSchema.validator({
+      boolean: true,
+      number: 6,
+      string: 'string',
+    });
+
+    expect(successResult.result).toBe(true);
+  });
 });
 
