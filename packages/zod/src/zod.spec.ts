@@ -63,5 +63,38 @@ describe('zodSchema', () => {
 
     expect(formSuccessValidationResult.result).toBe(true);
   });
+
+  it('should work correctly with zod effects' , () => {
+    const schema = z.object({
+      string: z.string().refine((string) => string.length > 0),
+      boolean: z.boolean().refine(Boolean),
+      number: z.number().refine((number) => number > 5),
+    });
+
+    const formSchema = zodSchema({
+      initialValues: {
+        boolean: false,
+        number: 0,
+        string: '',
+      },
+      schema,
+    });
+
+    const failResult = formSchema.validator({
+      boolean: false,
+      number: 0,
+      string: '',
+    });
+
+    expect(failResult.result).toBe(false);
+
+    const successResult = formSchema.validator({
+      boolean: true,
+      number: 6,
+      string: 'string',
+    });
+
+    expect(successResult.result).toBe(true);
+  });
 });
 
