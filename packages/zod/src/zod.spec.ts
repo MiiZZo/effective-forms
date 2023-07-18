@@ -26,11 +26,11 @@ describe('zodSchema', () => {
       email,
       age,
       isAdmin
-    } = schema.values;
+    } = schema.fields;
 
-    expect(email.initialValue).toBe(initialValues.email);
-    expect(age.initialValue).toBe(initialValues.age);
-    expect(isAdmin.initialValue).toBe(initialValues.isAdmin);
+    expect(email.init).toBe(initialValues.email);
+    expect(age.init).toBe(initialValues.age);
+    expect(isAdmin.init).toBe(initialValues.isAdmin);
 
     const emailFailedValidationResult = email.validator('');
 

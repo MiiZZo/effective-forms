@@ -7,7 +7,6 @@ import * as path from 'path';
 
 export default defineConfig({
   cacheDir: '../../node_modules/.vite/core',
-
   plugins: [
     dts({
       entryRoot: 'src',

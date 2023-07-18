@@ -1,5 +1,5 @@
 import { Store, Event, createEvent, createStore, sample, Effect, attach, combine, createEffect } from 'effector';
-
+import { AtLeastOne } from './types';
 export interface SuccessValidationResult {
   result: true;
 }
@@ -23,7 +23,7 @@ export type FormValidationResult<R extends boolean, T extends { [key: string]: s
 export type FieldValidationResult<R extends boolean> = R extends true ? SuccessValidationResult : FailFieldValidationResult;
 
 export interface FieldConfig<T extends string | number | boolean> {
-  initialValue: T;
+  init: T;
   validator: (value: T) => FieldValidationResult<boolean>;
 }
 
@@ -32,7 +32,10 @@ export type Fields<T extends { [key: string]: string | number | boolean }>  = {
 }
 
 export interface Schema<T extends { [key: string]: string | number | boolean }>  {
-  values: Fields<T>;
+  fields: Fields<T>;
+  validateOn?: AtLeastOne<{
+    change: boolean;
+  }>;
   validator: (values: { [key in keyof T]: T[key] }) => FormValidationResult<boolean, T>;
 }
 
@@ -59,28 +62,27 @@ interface Form<T extends { [key: string]: string | number | boolean }> {
   validateFormFx: Effect<void, FormValidationResult<boolean, T>, Error>
 }
 
-interface CreateFormConfig<T extends { [key: string]: string | number | boolean }> {
-  schema: Schema<T>;
-}
+type CreateFormConfig<T extends { [key: string]: string | number | boolean }> = Schema<T>;
 
 export function createForm<T extends { [key: string]: string | number | boolean }> ({
-  schema,
+  fields,
+  validator: formValidator,
+  validateOn,
 }: CreateFormConfig<T>): Form<T> {
-  const { values } = schema;
-
-  const fields: {
+  const fieldsMap: {
     [key in keyof T]: Field<any>
   } = {} as any;
-  const baseValidateFormFx = createEffect((fieldsValues: { [key in keyof T]: T[key] }) => schema.validator(fieldsValues));
+  const baseValidateFormFx = createEffect((fieldsValues: { [key in keyof T]: T[key] }) => formValidator(fieldsValues));
   const submit = createEvent();
   const submitted = createEvent();
   const formCleared = createEvent();
   const fieldsIsValidAsArray: Store<boolean>[] = [];
   const keyValue: Record<keyof T,  Store<T[Extract<keyof T, string>]>> = {} as any;
+  const isFormValidatedOnChange = validateOn?.change || false;
 
-  for (const valueKey in values) {
-    const field = values[valueKey];
-    const initialValue = field.initialValue;
+  for (const valueKey in fields) {
+    const field = fields[valueKey];
+    const initialValue = field.init;
 
     const changed = createEvent<typeof initialValue>();
     const cleared = createEvent();
@@ -122,6 +124,13 @@ export function createForm<T extends { [key: string]: string | number | boolean 
       filter: $isDirty.map((x) => !x),
       target: setIsDirty,
     });
+
+    if (isFormValidatedOnChange) {
+      sample({
+        clock: changed,
+        target: validateFx,
+      });
+    }
 
     sample({
       clock: validateFx.doneData,
@@ -171,7 +180,7 @@ export function createForm<T extends { [key: string]: string | number | boolean 
       ],
     });
 
-    fields[valueKey] = {
+    fieldsMap[valueKey] = {
       $value,
       $errors,
       $isValid,
@@ -191,7 +200,13 @@ export function createForm<T extends { [key: string]: string | number | boolean 
 
   sample({
     clock: submit,
-    source: $values,
+    filter: $isFormValid,
+    target: submitted,
+  });
+
+  sample({
+    clock: submit,
+    filter: $isFormValid.map((x) => !x),
     target: validateFormFx,
   });
 
@@ -200,9 +215,9 @@ export function createForm<T extends { [key: string]: string | number | boolean 
     filter: $isFormValid,
     target: submitted,
   });
-  
+
   return {
-    fields,
+    fields: fieldsMap,
     $isFormValid,
     $values,
     cleared: formCleared,

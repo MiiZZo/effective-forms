@@ -19,10 +19,9 @@ describe('create-form', () => {
   } as const;
 
   const form = createForm({
-    schema: {
-      values: {
+      fields: {
         userName: {
-          initialValue: initialValues.userName,
+          init: initialValues.userName,
           validator: (value) => {
             if (value === userName) {
               return {
@@ -37,7 +36,7 @@ describe('create-form', () => {
           },
         },
         age: {
-          initialValue: initialValues.age,
+          init: initialValues.age,
           validator: (value) => {
             if (value === age) {
               return {
@@ -52,7 +51,7 @@ describe('create-form', () => {
           },
         },
         email: {
-          initialValue: initialValues.email,
+          init: initialValues.email,
           validator: (value) => {
             if (value === email) {
               return {
@@ -67,7 +66,7 @@ describe('create-form', () => {
           },
         },
         isConfirmed: {
-          initialValue: initialValues.isConfirmed,
+          init: initialValues.isConfirmed,
           validator: (value) => {
             if (value) {
               return {
@@ -82,7 +81,7 @@ describe('create-form', () => {
           },
         },
         isAdmin: {
-          initialValue: initialValues.isAdmin,
+          init: initialValues.isAdmin,
           validator: (value) => {
             if (!value) {
               return {
@@ -138,7 +137,6 @@ describe('create-form', () => {
           result,
         };
       },
-    },
   });
 
   afterEach(() => {
@@ -360,27 +358,51 @@ describe('create-form', () => {
     }
   });
 
-  it('must trigger validate form when submit', async () => {    
-    const validateFormSpy = vi.fn();
+  it('By default, does not trigger validating field on change', async () => {    
+    const validateFieldSpy = vi.fn();
     
-    form.validateFormFx.watch(validateFormSpy);
+    form.fields.email.validateFx.watch(validateFieldSpy);
 
-    expect(validateFormSpy).toBeCalledTimes(0);
+    expect(validateFieldSpy).toBeCalledTimes(0);
 
-    await allSettled(form.submit, {
+    await allSettled(form.fields.email.changed, {
       scope,
+      params: 'example@gmail.com',
     });
 
-    expect(validateFormSpy).toBeCalledTimes(1);
+    expect(validateFieldSpy).toBeCalledTimes(0);
+  });
+
+  it('must trigger field validating on change', async () => {
+    const validateFieldSpy = vi.fn();
+
+    const simpleForm = createForm({
+      fields: {
+        email: {
+          init: '' as string,
+          validator: () => ({ result: true }),
+        }
+      },
+      validator: () => ({ result: true }),
+      validateOn: {
+        change: true,
+      },
+    });
+
+    simpleForm.fields.email.validateFx.watch(validateFieldSpy);
+
+    expect(validateFieldSpy).toBeCalledTimes(0);
+
+    simpleForm.fields.email.changed('email');
+    
+    expect(validateFieldSpy).toBeCalledTimes(1);
   });
 
   it('must trigger `submitted` event after successful validation', async () => {    
     const submittedSpy = vi.fn();
     const emptyForm = createForm({
-      schema: {
-        values: {},
-        validator: () => ({ result: true }),
-      },
+      fields: {},
+      validator: () => ({ result: true }),
     });
 
     emptyForm.submitted.watch(submittedSpy);
