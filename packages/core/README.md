@@ -1,11 +1,33 @@
-# core
+## @effective-forms/zod
+See full [documentaion](https://github.com/MiiZZo/effective-forms)
+## Installation
 
-This library was generated with [Nx](https://nx.dev).
+NPM
+```
+npm install zod @effective-forms/zod
+```
+Yarn
+```
+yarn add zod @effective-forms/zod
+```
+## Usage example
+```ts
+import { createForm } from '@effective-forms/core';
 
-## Building
+const form = createForm(
+  fields: {
+    email: {
+      init: '',
+      validator: (email) => {
+        if (email.length > 2) {
+          return { result: true };
+        }
 
-Run `nx build core` to build the library.
+        return { result: false, errors: ['is not valid'] };
+      },
+    }
+  },
+  validator: (fields) => ...
+);
 
-## Running unit tests
-
-Run `nx test core` to execute the unit tests via [Jest](https://jestjs.io).
+```

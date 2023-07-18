@@ -12,7 +12,10 @@ interface Config<T extends {
   schema: ZodObject<T, "strip", ZodTypeAny, { [k_1 in keyof objectUtil.addQuestionMarks<baseObjectOutputType<T>, { [k in keyof baseObjectOutputType<T>]: undefined extends baseObjectOutputType<T>[k] ? never : k; }[keyof T]>]: objectUtil.addQuestionMarks<baseObjectOutputType<T>, { [k in keyof baseObjectOutputType<T>]: undefined extends baseObjectOutputType<T>[k] ? never : k; }[keyof T]>[k_1]; }, { [k_2 in keyof baseObjectInputType<T>]: baseObjectInputType<T>[k_2]; }>;
   initialValues: {
     [key in keyof T]: T[key]['_type'];
-  },
+  };
+  validateOn?: {
+    change: boolean,
+  };
 }
 
 export function zodSchema<T extends {
@@ -26,9 +29,10 @@ export function zodSchema<T extends {
   }>({
   schema,
   initialValues,
+  validateOn,
 }: Config<T>) {
   const finalSchema: Schema<{ [key in keyof T]: T[key]['_type'] }> = {
-    values: {} as Schema<{ [key in keyof T]: T[key]['_type'] }>["values"],
+    fields: {} as Schema<{ [key in keyof T]: T[key]['_type'] }>["fields"],
     validator: (values) => {
       const result = schema.safeParse(values);
 
@@ -43,13 +47,14 @@ export function zodSchema<T extends {
         errors: result.error.flatten().fieldErrors as FailFormValidationResult<{ [key in keyof T]: T[key]["_type"]; }>["errors"],
       };
     },
+    validateOn,
   };
   
   for (const key in schema.shape) {
     const field = schema.shape[key];
 
-    finalSchema.values[key] = {
-      initialValue: initialValues[key],
+    finalSchema.fields[key] = {
+      init: initialValues[key],
       validator: (value: typeof field['_type']) => {
         const result = field.safeParse(value);
 
