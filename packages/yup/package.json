@@ -4,5 +4,6 @@
   "type": "commonjs",
   "peerDependencies": {
     "yup": "^1.2.0"
-  }
+  },
+  "keywords": ["effector", "yup", "effective-forms", "forms", "form-managment"]
 }
