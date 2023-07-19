@@ -29,6 +29,7 @@
     "vite-plugin-dts": "~2.3.0",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.32.0",
+    "yup": "1.2.0",
     "zod": "3.21.4"
   },
   "nx": {

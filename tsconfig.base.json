@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@effective-forms/core": ["packages/core/src/index.ts"],
+      "@effective-forms/yup": ["packages/yup/src/index.ts"],
       "@effective-forms/zod": ["packages/zod/src/index.ts"]
     }
   },

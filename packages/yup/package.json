@@ -1,0 +1,9 @@
+{
+  "name": "@effective-forms/yup",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "peerDependencies": {
+    "yup": "^1.2.0"
+  },
+  "keywords": ["effector", "yup", "effective-forms", "forms", "form-managment"]
+}
