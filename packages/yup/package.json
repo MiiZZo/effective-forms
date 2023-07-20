@@ -5,5 +5,6 @@
   "peerDependencies": {
     "yup": "^1.2.0"
   },
+  "license": "MIT",
   "keywords": ["effector", "yup", "effective-forms", "forms", "form-managment"]
 }
