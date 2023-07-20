@@ -1,4 +1,4 @@
-## @effective-forms/zod
+## @effective-forms/yup
 See full [documentaion](https://github.com/MiiZZo/effective-forms)
 ### About library
 Integrate `yup` with [core package](http://www.npmjs.com/package/@effective-forms/core)
@@ -18,9 +18,9 @@ import { createForm } from '@effective-forms/core';
 import { yupSchema } from '@effective-forms/yup';
 import { object, string } from 'yup';
 
-const userSchema = z.object({
-  email: z.string(),
-  password: z.string(),
+const userSchema = object({
+  email: string().required(),
+  password: string().required(),
 });
 
 const form = createForm(
