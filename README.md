@@ -162,6 +162,8 @@ const form = createForm(
 
 // Now you can just work with your form.
 ```
+### Real code examples
+You can see real code examples in the [examples folder.](https://github.com/MiiZZo/effective-forms/tree/master/examples)
 ### API
 
 TODO
