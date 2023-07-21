@@ -58,37 +58,35 @@ yarn add effector @effective-forms/core
 # Basic usage example
 ```ts
 const form = createForm({
-  schema: {
-    values: {
-      email: {
-        initialValue: '',
-        validator: (email) => {
-          if (email.includes('@') {
-            return {
-              result: true,
-            }
-          }
-
+  fields: {
+    email: {
+      init: '',
+      validator: (email) => {
+        if (email.includes('@') {
           return {
-            result: false,
-            errors: ['Email is not valid'],
+            result: true,
           }
-        },
+        }
+  
+        return {
+          result: false,
+          errors: ['Email is not valid'],
+        }
       },
-      password: {
-        initialValue: '',
-        validator: (password) => {
-          if (password.length >= 8) {
-            return {
-              result: true,
-            }
-          }
-
+    },
+    password: {
+      init: '',
+      validator: (password) => {
+        if (password.length >= 8) {
           return {
-            result: false,
-            errors: ['Password must contains at least 8 symbols'],
+            result: true,
           }
-        },
+        }
+  
+        return {
+          result: false,
+          errors: ['Password must contains at least 8 symbols'],
+        }
       },
     },
   },
@@ -124,15 +122,15 @@ const userSchema = z.object({
   email: z.string().email('Email is not valid'),
 });
 
-const form = createForm({
-  schema: zodSchema({
+const form = createForm(
+  zodSchema({
     schema: userSchema,
     initialValues: {
       username: '',
       password: '',
     }, 
   }),
-});
+);
 
 // Now you can just work with your form.
 ```
@@ -152,15 +150,15 @@ const userSchema = object({
   email: string().email('Email is not valid').required(),
 });
 
-const form = createForm({
-  schema: yupSchema({
+const form = createForm(
+  yupSchema({
     schema: userSchema,
     initialValues: {
       username: '',
       password: '',
     }, 
-  }),
-});
+  })
+);
 
 // Now you can just work with your form.
 ```
