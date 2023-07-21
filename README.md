@@ -136,6 +136,34 @@ const form = createForm({
 
 // Now you can just work with your form.
 ```
+
+### Usage with yup
+```
+npm i add yup @effective-forms/yup
+```
+
+```ts
+import { createForm } from '@effective-forms/core';
+import { yupSchema } from '@effective-forms/yup';
+import { object, string } from 'yup';
+
+const userSchema = object({
+  password: string().min(8, 'Password must contains at least 8 symbols').required(),
+  email: string().email('Email is not valid').required(),
+});
+
+const form = createForm({
+  schema: yupSchema({
+    schema: userSchema,
+    initialValues: {
+      username: '',
+      password: '',
+    }, 
+  }),
+});
+
+// Now you can just work with your form.
+```
 ### API
 
 TODO
