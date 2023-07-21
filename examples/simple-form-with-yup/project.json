@@ -1,0 +1,74 @@
+{
+  "name": "simple-form-with-yup",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "examples/simple-form-with-yup/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/examples/simple-form-with-yup"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "simple-form-with-yup:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "simple-form-with-yup:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "simple-form-with-yup:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "simple-form-with-yup:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "simple-form-with-yup:build:development"
+        },
+        "production": {
+          "buildTarget": "simple-form-with-yup:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["coverage/examples/simple-form-with-yup"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/examples/simple-form-with-yup"
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "examples/simple-form-with-yup/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
