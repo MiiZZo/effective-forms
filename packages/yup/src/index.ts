@@ -3,12 +3,9 @@ import { Schema } from '@effective-forms/core';
 
 interface Config<T extends 
 ObjectSchema<object, AnyObject, object, "">
-> {
+> extends Pick<Schema<InferType<T>>, 'validateOn' | 'clearOn'> {
   schema: T;
   initialValues: InferType<T>;
-  validateOn?: {
-    change: boolean,
-  };
 }
 
 export function yupSchema<T extends
@@ -32,6 +29,7 @@ export function yupSchema<T extends
 
       return { result: true };
     },
+    clearOn: config.clearOn,
     validateOn: config.validateOn,
   };
 

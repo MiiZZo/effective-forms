@@ -1,5 +1,5 @@
-import { Store, Event, createEvent, createStore, sample, Effect, attach, combine, createEffect } from 'effector';
-import { AtLeastOne } from './types';
+import { Store, Event, createEvent, createStore, sample, Effect, attach, combine, createEffect, Unit } from 'effector';
+import { AtLeastOne, NonEmptyArray } from './types';
 export interface SuccessValidationResult {
   result: true;
 }
@@ -36,6 +36,7 @@ export interface Schema<T extends { [key: string]: string | number | boolean }> 
   validateOn?: AtLeastOne<{
     change: boolean;
   }>;
+  clearOn?: NonEmptyArray<Unit<unknown>>;
   validator: (values: { [key in keyof T]: T[key] }) => FormValidationResult<boolean, T>;
 }
 
@@ -59,15 +60,16 @@ interface Form<T extends { [key: string]: string | number | boolean }> {
   cleared: Event<void>;
   submit: Event<void>;
   submitted: Event<void>;
-  validateFormFx: Effect<void, FormValidationResult<boolean, T>, Error>
+  validateFormFx: Effect<void, FormValidationResult<boolean, T>, Error>;
 }
 
-type CreateFormConfig<T extends { [key: string]: string | number | boolean }> = Schema<T>;
+export type CreateFormConfig<T extends { [key: string]: string | number | boolean }> = Schema<T>;
 
 export function createForm<T extends { [key: string]: string | number | boolean }> ({
   fields,
   validator: formValidator,
   validateOn,
+  clearOn,
 }: CreateFormConfig<T>): Form<T> {
   const fieldsMap: {
     [key in keyof T]: Field<any>
@@ -197,6 +199,14 @@ export function createForm<T extends { [key: string]: string | number | boolean 
   const $values = combine(keyValue) as unknown as Store<{ [key in keyof T]: T[key] }>;
 
   const validateFormFx = attach({ effect: baseValidateFormFx, source: $values });
+
+  if (clearOn) {
+    sample({
+      // @ts-ignore
+      clock: clearOn,
+      target: formCleared,
+    });
+  }
 
   sample({
     clock: submit,
