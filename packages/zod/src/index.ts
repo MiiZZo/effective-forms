@@ -56,6 +56,7 @@ export function zodSchema<T extends {
       };
     },
     validateOn,
+    clearOn,
   };
   
   for (const key in schema.shape) {
