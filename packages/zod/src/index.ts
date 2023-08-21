@@ -18,7 +18,7 @@ interface Config<T extends {
     | z.ZodEffects<z.ZodNumber, number, number>
     | z.ZodEffects<z.ZodString, string, string>
     | z.ZodEffects<z.ZodBoolean, boolean, boolean>
-  }> extends Schema<z.infer<SchemaType<T>>> {
+  }> extends Pick<Schema<z.infer<SchemaType<T>>>, 'validateOn' | 'clearOn'> {
   schema: SchemaType<T>;
   initialValues: {
     [key in keyof T]: T[key]['_type'];
