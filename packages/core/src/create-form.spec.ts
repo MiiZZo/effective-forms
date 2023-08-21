@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { fork, is, allSettled } from 'effector';
+import { fork, is, allSettled, createEvent } from 'effector';
 import { faker } from '@faker-js/faker';
 import { createForm } from './create-form';
 
@@ -469,5 +469,24 @@ describe('create-form', () => {
     expect(scope.getState(form.fields.email.$value)).toBe(initialValues.email);
     expect(scope.getState(form.fields.email.$isDirty)).toBe(false);
     expect(scope.getState(form.fields.email.$isValid)).toBe(false);
+  });
+
+  it ('must trigger form.cleared on clearOn', async () => {
+    const someEvent = createEvent();
+    const clearedFormSpy = vi.fn();
+
+    const simpleForm = createForm({
+      fields: {},
+      validator: () => ({ result: true }),
+      clearOn: [someEvent],
+    });
+
+    simpleForm.cleared.watch(clearedFormSpy);
+
+    await allSettled(someEvent, {
+      scope,
+    });
+
+    expect(clearedFormSpy).toBeCalledTimes(1);
   });
 });
