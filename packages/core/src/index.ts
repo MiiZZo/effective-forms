@@ -7,5 +7,7 @@ export {
   type FormValidationResult,
   type FailFormValidationResult,
   type FieldValidationResult,
+  type Field,
+  type Form,
   createForm,
 } from './create-form';
