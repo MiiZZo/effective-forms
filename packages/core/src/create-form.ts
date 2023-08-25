@@ -40,7 +40,7 @@ export interface Schema<T extends { [key: string]: string | number | boolean }> 
   validator: (values: { [key in keyof T]: T[key] }) => FormValidationResult<boolean, T>;
 }
 
-type Field<T extends string | number | boolean> = {
+export type Field<T extends string | number | boolean> = {
   $value: Store<T>;
   $errors: Store<string[]>;
   $isValid: Store<boolean>;
@@ -51,7 +51,7 @@ type Field<T extends string | number | boolean> = {
   validated: Event<boolean>;
 }
 
-interface Form<T extends { [key: string]: string | number | boolean }> {
+export interface Form<T extends { [key: string]: string | number | boolean }> {
   fields: {
     [key in keyof T]: Field<T[key]>;
   };
