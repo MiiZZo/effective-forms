@@ -1,10 +1,18 @@
 {
   "name": "@effective-forms/yup",
   "version": "0.0.1",
-  "type": "commonjs",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.cjs",
+      "default": "./index.js",
+      "types": "./index.d.ts"
+    }
+  },
   "peerDependencies": {
     "yup": "^1.2.0"
   },
-  "license": "MIT",
   "keywords": ["effector", "yup", "effective-forms", "forms", "form-managment"]
 }

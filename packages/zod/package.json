@@ -1,8 +1,16 @@
 {
   "name": "@effective-forms/zod",
   "version": "0.0.1",
-  "type": "commonjs",
+  "type": "module",
   "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.cjs",
+      "default": "./index.js",
+      "types": "./index.d.ts"
+    }
+  },
   "peerDependencies": {
     "zod": "^3.21.4"
   },
